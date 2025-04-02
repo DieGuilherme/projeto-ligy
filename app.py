@@ -2,6 +2,29 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+
+def autenticar():
+    usuarios = {"ligyadmin": "2707"}  # simples para demo
+    with st.sidebar:
+        st.title("🔐 Login")
+        usuario = st.text_input("Usuário")
+        senha = st.text_input("Senha", type="password")
+        login = st.button("Entrar")
+
+    if login:
+        if usuario in usuarios and usuarios[usuario] == senha:
+            st.session_state["logado"] = True
+        else:
+            st.error("Usuário ou senha inválidos.")
+
+if "logado" not in st.session_state:
+    st.session_state["logado"] = False
+
+if not st.session_state["logado"]:
+    autenticar()
+    st.stop()
+
+
 st.set_page_config(page_title="Faturamento Ligy", layout="wide")
 st.title("📊 Projeto Faturamento Ligy")
 
@@ -73,21 +96,22 @@ if uploaded_file:
     st.dataframe(df_temp[["cliente_ref", "sub_energia_s_gd", "fat_enel_s_gd", "sub_energia_gd", "dif_cons_injec", "tx_ip ($$)", "cob_des_add", "val_cons_final", "fatura_enel_real", "benef_gd", "benef_ligy", "s_ligy", "c_ligy", "economia_real", "economia_percebida", "fatura_ligy", "carbono", "farol"]])
 
     # Download dos resultados
-check_fatura_cols = [
-    "cliente_ref", "Valor_Ligy", "consumo (kWh)", "tipo_forn",
-    "custo_disp", "limite_comp", "cons_faturado", "val_add", "val_cons_final"
-]
-
-fatura_ligy_cols = [
-    "cliente_ref", "sub_energia_s_gd", "fat_enel_s_gd", "sub_energia_gd", "dif_cons_injec",
-    "tx_ip ($$)", "cob_des_add", "benef_gd", "benef_ligy", "s_ligy", "c_ligy",
-    "economia_real", "economia_percebida", "fatura_ligy", "carbono",
-    "val_cons_final", "fatura_enel_real", "farol"
-]
-
-with pd.ExcelWriter("resultados_faturamento_streamlit.xlsx") as writer:
-    df_temp[check_fatura_cols].to_excel(writer, sheet_name='Check de Fatura', index=False)
-    df_temp[fatura_ligy_cols].to_excel(writer, sheet_name='Fatura Ligy', index=False)
     
-with open("resultados_faturamento_streamlit.xlsx", "rb") as f:
+    check_fatura_cols = [
+        "cliente_ref", "Valor_Ligy", "consumo (kWh)", "tipo_forn",
+        "custo_disp", "limite_comp", "cons_faturado", "val_add", "val_cons_final"
+    ]
+
+    fatura_ligy_cols = [
+        "cliente_ref", "sub_energia_s_gd", "fat_enel_s_gd", "sub_energia_gd", "dif_cons_injec",
+        "tx_ip ($$)", "cob_des_add", "benef_gd", "benef_ligy", "s_ligy", "c_ligy",
+        "economia_real", "economia_percebida", "fatura_ligy", "carbono",
+        "val_cons_final", "fatura_enel_real", "farol"
+    ]
+
+    with pd.ExcelWriter("resultados_faturamento_streamlit.xlsx") as writer:
+        df_temp[check_fatura_cols].to_excel(writer, sheet_name='Check de Fatura', index=False)
+        df_temp[fatura_ligy_cols].to_excel(writer, sheet_name='Fatura Ligy', index=False)
+
+    with open("resultados_faturamento_streamlit.xlsx", "rb") as f:
         st.download_button("📥 Baixar resultados em Excel", f, file_name="resultado_faturamento_ligy.xlsx")
