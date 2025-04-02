@@ -73,9 +73,9 @@ if uploaded_file:
     st.dataframe(df_temp[["cliente_ref", "sub_energia_s_gd", "fat_enel_s_gd", "sub_energia_gd", "dif_cons_injec", "tx_ip ($$)", "cob_des_add", "val_cons_final", "fatura_enel_real", "benef_gd", "benef_ligy", "s_ligy", "c_ligy", "economia_real", "economia_percebida", "fatura_ligy", "carbono", "farol"]])
 
     # Download dos resultados
-    check_fatura_cols = ["cliente_ref", "Valor_Ligy", "consumo (kWh)", "tipo_forn", "custo_disp", "limite_comp", "cons_faturado", "val_add", "val_cons_final"]
+check_fatura_cols = ["cliente_ref", "Valor_Ligy", "consumo (kWh)", "tipo_forn", "custo_disp", "limite_comp", "cons_faturado", "val_add", "val_cons_final"]
 
-    fatura_ligy_cols = ["cliente_ref", "sub_energia_s_gd", "fat_enel_s_gd", "sub_energia_gd", "dif_cons_injec", "tx_ip ($$)", "cob_des_add", "benef_gd", "benef_ligy", "s_ligy", "c_ligy", "economia_real", "economia_percebida", "fatura_ligy", "carbono", "val_cons_final", "fatura_enel_real", "farol"]
+fatura_ligy_cols = ["cliente_ref", "sub_energia_s_gd", "fat_enel_s_gd", "sub_energia_gd", "dif_cons_injec", "tx_ip ($$)", "cob_des_add", "benef_gd", "benef_ligy", "s_ligy", "c_ligy", "economia_real", "economia_percebida", "fatura_ligy", "carbono", "val_cons_final", "fatura_enel_real", "farol"]
 
 with pd.ExcelWriter("resultados_faturamento_streamlit.xlsx") as writer:
     df_temp[check_fatura_cols].to_excel(writer, sheet_name='Check de Fatura', index=False)
